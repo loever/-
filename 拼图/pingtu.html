@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style>
+	img{
+		float:left;
+	}
+	.box{
+		width: 500px;
+		height: 500px;
+		margin:0 auto;
+		border:10px solid pink;
+		position:relative;
+	}
+	.box div{
+		width: 125px;
+		height: 125px;
+		position:absolute;
+		left:0;
+		top:0;
+		background:url(img/1.jpg);
+	}
+</style>
+</head>
+<body>
+	<img src="img/1.jpg" alt="">
+	<div class="box"></div>
+</body>
+
+
+<script>
+	var box=document.getElementsByClassName("box")[0];
+	console.log(box);
+	var arr=[];
+	for(var i=0;i<4;i++){       // 获取分割图片数量
+		for(var j=0;j<4;j++){
+			var json={};
+			json.left=-125*i;  // 获取背景图片url  定位left
+			json.top=-125*j;   // 获取背景图片url  定位top
+			arr.push(json);
+		}
+	}
+	arr.splice(15,1)   // 去掉一个空白图片
+    var a=0;
+    for(var i=0;i<4;i++){
+		for(var j=0;j<4;j++){
+			var ren=parseInt(Math.random()*(15-a));  // 获取随机背景图片
+			a++;
+			var div=document.createElement("div"); // 创建图片div  
+			div.style.left=125*i+"px";            //   图片div 的位置
+			div.style.top=125*j+"px";			//   图片div 的位置
+			if(i==3&&j==3){
+				div.style.background="none";   //如果是最后一张图片 没有背景url 
+				div.className="result";       // 空白图片的class
+			}else{
+				div.className="list";          // 图片class 
+				div.style.backgroundPosition=arr[ren].left+"px "+arr[ren].top+"px";   //给图片设置背景
+				arr.splice(ren,1)      // 防止url 重复
+			}
+			box.appendChild(div);    // 把图片div 插入box里面
+		}
+	}
+    
+ 
+    var list=document.getElementsByClassName("list");
+    var result=document.getElementsByClassName("result")[0]; 
+    box.onclick=function(e){         //点击事件   用事件委托
+        e=e||window.event;
+        target=e.target||src.Element;
+        if(target.className=="list"){   // 当点击的是有背景的图片时
+        	var lefts=parseInt(getStyle(result,"left"));   //获取空白图片的left
+        	var tops=parseInt(getStyle(result,"top"));     //获取空白图片的铜牌
+        	var sleft=parseInt(getStyle(target,"left"));	//获取背景图片的left
+        	var stop=parseInt(getStyle(target,"top"));		//获取背景图片的top
+        	if(lefts==sleft&&Math.abs(tops-stop)==125||tops-stop==0&&Math.abs(lefts-sleft)==125){  // 这步是逻辑关键   当图片的top 一样背景left和空白left 绝对值==125px  的时候调换他们的位置   反之一样
+        		target.style.left=lefts+"px";
+        		target.style.top=tops+"px";
+        		result.style.left=sleft+"px";
+        		result.style.top=stop+"px";
+        	}
+        }
+    }
+
+
+	document.onkeyup=function(e){
+        e=e||window.event;
+        if(e.keyCode){  // 监听键盘事件
+        	key=e.keyCode;
+        }
+        if(key==37){  //上建
+        	toleft();  
+        }else if(key==38){  // 右键
+        	totop();
+        }else if(key==39){  //下键
+        	toright();
+        }else if(key==40){ //左键
+            tobottom();
+        }
+    }
+
+
+    function toleft(){
+    	var lefts=parseInt(getStyle(result,"left"));
+        var tops=parseInt(getStyle(result,"top"));
+    	for(var i=0;i<list.length;i++){
+    		var sleft=parseInt(getStyle(list[i],"left"));
+        	var stop=parseInt(getStyle(list[i],"top"));
+        	if(parseInt(getStyle(list[i],"top"))==tops&&parseInt(getStyle(list[i],"left"))+125==lefts){  //原理和上面的点击事件一样  当空白和背景的top 都一样  left的绝对值125培训 调换背景和空白的位置
+        		list[i].style.left=lefts+"px";
+        		list[i].style.top=tops+"px";
+        		result.style.left=sleft+"px";
+        		result.style.top=stop+"px";
+        	}
+
+    	}
+    }  
+        function totop(){
+    	var lefts=parseInt(getStyle(result,"left"));
+        var tops=parseInt(getStyle(result,"top"));
+    	for(var i=0;i<list.length;i++){
+    		var sleft=parseInt(getStyle(list[i],"left"));
+        	var stop=parseInt(getStyle(list[i],"top"));
+        	if(parseInt(getStyle(list[i],"left"))==lefts&&parseInt(getStyle(list[i],"top"))+125==tops){
+        		list[i].style.left=lefts+"px";
+        		list[i].style.top=tops+"px";
+        		result.style.left=sleft+"px";
+        		result.style.top=stop+"px";
+        	}
+
+    	}
+    }    
+
+
+        function toright(){
+    	var lefts=parseInt(getStyle(result,"left"));
+        var tops=parseInt(getStyle(result,"top"));
+    	for(var i=0;i<list.length;i++){
+    		var sleft=parseInt(getStyle(list[i],"left"));
+        	var stop=parseInt(getStyle(list[i],"top"));
+        	if(parseInt(getStyle(bxx[i],"top"))==tops&&parseInt(getStyle(list[i],"left"))-125==lefts){
+        		list[i].style.left=lefts+"px";
+        		list[i].style.top=tops+"px";
+        		result.style.left=sleft+"px";
+        		result.style.top=stop+"px";
+        	}
+
+    	}
+    }    
+            function tobottom(){
+    	var lefts=parseInt(getStyle(result,"left"));
+        var tops=parseInt(getStyle(result,"top"));
+    	for(var i=0;i<list.length;i++){
+    		var sleft=parseInt(getStyle(list[i],"left"));
+        	var stop=parseInt(getStyle(list[i],"top"));
+        	if(parseInt(getStyle(list[i],"left"))==lefts&&parseInt(getStyle(list[i],"top"))-125==tops){
+        		list[i].style.left=lefts+"px";
+        		list[i].style.top=tops+"px";
+        		result.style.left=sleft+"px";
+        		result.style.top=stop+"px";
+        	}
+
+    	}
+    }   
+
+
+   
+
+	function getStyle(el,st){
+		if(el.currentStyle){
+			return el.currentStyle[st];
+		}else{
+			return getComputedStyle(el,null)[st];
+		}
+	}
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</html>
